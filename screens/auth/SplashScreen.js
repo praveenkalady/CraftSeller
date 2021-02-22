@@ -14,8 +14,8 @@ const SplashScreen = (props) => {
             </View>
             <View style={styles.footer}>
                 <View style={styles.buttonContainer}>
-                    <View style={{marginBottom:20}}><Button onPress={()=>props.navigation.navigate('Signup')} TouchableComponent={TouchableWithoutFeedback} raised={true} buttonStyle={styles.button} title="Sign Up"/></View>
-                    <View style={{marginBottom:30}}><Button onPress={()=>props.navigation.navigate('Login')} TouchableComponent={TouchableWithoutFeedback} type="outlined" raised={true} buttonStyle={styles.button} title="Login"/></View>
+                    <View style={{marginBottom:20}}><Button onPress={()=>props.navigation.navigate('Signup')} TouchableComponent={TouchableWithoutFeedback} raised={true} buttonStyle={styles.button} title="SIGN UP"/></View>
+                    <View style={{marginBottom:30}}><Button onPress={()=>props.navigation.navigate('Login')} TouchableComponent={TouchableWithoutFeedback} type="outline" raised={true} buttonStyle={styles.button} title="LOGIN"/></View>
                     <Text style={{fontFamily:theme.medium,opacity:0.5,textAlign:"center"}}>Create your products and market with us.</Text>
                 </View>
             </View>
