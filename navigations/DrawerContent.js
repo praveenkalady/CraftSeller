@@ -28,10 +28,13 @@ const DrawerContent = (props) => {
                         <Text style={{opacity:0.6}}>{email}</Text>
                     </View>
                 </View>
-                <DrawerItem style={{marginTop:20}} onPress={()=>props.navigation.navigate('Home')} icon={({color,size})=>(
+                <DrawerItem  style={{marginTop:20}} onPress={()=>props.navigation.navigate('Home')} icon={({color,size})=>(
                     <Icon name="home" color={color} size={size}/>
                 )} label="Home"/>
-                 <DrawerItem  onPress={()=>props.navigation.navigate('Orders')} icon={({color,size})=>(
+                <DrawerItem onPress={()=>props.navigation.navigate('Cart')} icon={({color,size})=>(
+                    <Icon name="shopping-cart" color={color} size={size}/>
+                )} label="Cart"/>
+                 <DrawerItem  onPress={()=>props.navigation.navigate('Order')} icon={({color,size})=>(
                     <Icon name="truck" color={color} size={size}/>
                 )} label="Orders"/>
                 <DrawerItem onPress={()=>props.navigation.navigate('Settings')} icon={({color,size})=>(
