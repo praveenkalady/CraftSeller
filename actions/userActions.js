@@ -1,4 +1,5 @@
 import { SET_USER, LOGOUT_USER} from '../actions/types';
+import auth from '@react-native-firebase/auth';
 
 export const setUser = (user) => {
     return {
@@ -7,8 +8,3 @@ export const setUser = (user) => {
     }
 }
 
-export const logoutUser = () => {
-    return {
-        type: LOGOUT_USER
-    }
-}

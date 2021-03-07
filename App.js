@@ -1,10 +1,11 @@
-import React,{ useLayoutEffect } from 'react'
+import React,{ useLayoutEffect,useState } from 'react'
 import { StatusBar } from 'react-native'
 import {  NavigationContainer } from '@react-navigation/native';
 import { AuthNavigator } from './navigations/StackNavigations';
+import { DrawerNavigation } from './navigations/DrawerNavigation';
 import { ThemeProvider} from 'react-native-elements';
 import { Provider } from 'react-redux';
-import { setUser,logoutUser } from './actions/userActions';
+import { setUser} from './actions/userActions';
 import auth from '@react-native-firebase/auth';
 import store from './store';
 
@@ -19,22 +20,29 @@ const theme = {
   italic:"Poppins-MediumItalic"
 }
 const App = () => {
-
+  let mounted = true;
+  const [authUser,setAuthUser] = useState(null);
   useLayoutEffect(()=>{
     auth().onAuthStateChanged(user => {
-      if(user){
-        store.dispatch(setUser(user));
-      } else {
-        store.dispatch(logoutUser());
+      if(mounted){
+        if(user){
+          store.dispatch(setUser(user));
+          setAuthUser(user);
+        } else {
+          setAuthUser(null);     
+        }
       }
     })
+    return()=>{
+      mounted = false;
+    }
   },[])
   return (
     <Provider store={store}>
     <NavigationContainer>
       <ThemeProvider theme={theme}>
       <StatusBar bgStyle="dark-content"/>
-      <AuthNavigator/>
+      {authUser ?(<DrawerNavigation/>) : (<AuthNavigator/>)}
       </ThemeProvider>
     </NavigationContainer>
     </Provider>
