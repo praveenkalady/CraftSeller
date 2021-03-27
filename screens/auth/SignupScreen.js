@@ -64,7 +64,7 @@ const SignupScreen = (props) => {
                 </View>
                 <View style={{flex:1,alignItems:"center"}}>
                 <View style={styles.buttonContainer}>
-                <Button  loading={loading} onPress={handleSubmit} TouchableComponent={TouchableWithoutFeedback} buttonStyle={styles.button} title="Create Buyer Account" />
+                <Button  loading={loading} onPress={handleSubmit} TouchableComponent={TouchableWithoutFeedback} buttonStyle={styles.button} title="Create Account" />
                 <View style={{flexDirection:"row",justifyContent:"center",marginTop:8}}>
                 <Text style={styles.foot}>Already a member ?</Text>
                 <TouchableOpacity onPress={()=> props.navigation.navigate('Login')} >

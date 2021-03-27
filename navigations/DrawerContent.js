@@ -2,11 +2,11 @@ import React from 'react'
 import { useSelector } from 'react-redux';
 import { View,StyleSheet} from 'react-native';
 import { DrawerContentScrollView,DrawerItem} from '@react-navigation/drawer';
-import { Avatar,Text } from 'react-native-elements';
+import { Avatar,Text,Badge,withBadge } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/Feather'
 import auth from '@react-native-firebase/auth';
 const DrawerContent = (props) => {
-    const { email,emailVerified } = useSelector(state=>state.user.user);
+    const { email } = useSelector(state=>state.user.user);
     const handleLogout = async () => {
         try{
             await auth().signOut();
@@ -16,6 +16,7 @@ const DrawerContent = (props) => {
         
     }
     const title = email[0] + email[1];
+    const BadgeIcon = withBadge(10)(Icon);
     return (
         <>
         <DrawerContentScrollView style={styles.container} {...props} >
@@ -31,8 +32,8 @@ const DrawerContent = (props) => {
                 <DrawerItem  style={{marginTop:20}} onPress={()=>props.navigation.navigate('Home')} icon={({color,size})=>(
                     <Icon name="home" color={color} size={size}/>
                 )} label="Home"/>
-                <DrawerItem onPress={()=>props.navigation.navigate('Cart')} icon={({color,size})=>(
-                    <Icon name="shopping-cart" color={color} size={size}/>
+                <DrawerItem  onPress={()=>props.navigation.navigate('Cart')} icon={({color,size})=>(
+                    <BadgeIcon name="shopping-cart" size={size} />
                 )} label="Cart"/>
                  <DrawerItem  onPress={()=>props.navigation.navigate('Order')} icon={({color,size})=>(
                     <Icon name="truck" color={color} size={size}/>

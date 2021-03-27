@@ -10,7 +10,7 @@ const Drawer = createDrawerNavigator();
 export function DrawerNavigation({ navigation }){
     return(
     <Drawer.Navigator drawerContent={props=><DrawerContent {...props} />} >
-        <Drawer.Screen name="Home" component={BottomTabNavigator} />
+        <Drawer.Screen name="HomeScreen" component={BottomTabNavigator} />
     </Drawer.Navigator>
     )
 }
