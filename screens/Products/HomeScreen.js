@@ -1,16 +1,18 @@
 import React from 'react'
-import { View, Text,StyleSheet } from 'react-native'
+import { View,StyleSheet,ScrollView } from 'react-native'
 import Showcase from '../../components/Showcase';
+import { Text } from 'react-native-elements';
 
 const HomeScreen = () => {
     return (
-        <View style={styles.container}>
+        <ScrollView style={styles.container}>
             <View style={styles.header}>
                 <Showcase/>
                 </View>
                 <View style={styles.footer}>
+                <Text style={styles.sectionHeader} h4>Purchase Products</Text>
             </View>
-        </View>
+        </ScrollView>
     )
 }
 
@@ -26,6 +28,11 @@ const styles = StyleSheet.create({
         flex:3
     },
     footer:{
-        flex:3
+        flex:3,
+        padding:10
+    },
+    sectionHeader: {
+        marginVertical:18,
+        
     }
 })

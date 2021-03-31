@@ -1,7 +1,7 @@
 import React,{ useState,useLayoutEffect } from 'react'
 import firestore from '@react-native-firebase/firestore';
-import { View,ScrollView} from 'react-native';
-import { Text,Card,Button } from 'react-native-elements';
+import { View,ScrollView,Pressable } from 'react-native';
+import { Text,Card } from 'react-native-elements';
 
 
 
@@ -29,13 +29,14 @@ const Showcase = () => {
             <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={{ flex: 1, flexDirection:'row'}}>
                 {loading && <Text>Loading...</Text>}
                 {showcaseItems?.map((item,i)=> (
+                    <Pressable key={i} onPress={() =>console.log('Pressed')}>
                    <Card containerStyle={{width:320}} key={i}>
                        <Card.Title>{item.title}</Card.Title>
                        <Card.Divider/>
                        <Card.Image source={{uri:item.image}} />
-                       <Button style={{marginTop:10}} title="Explore"/>
-                       <Card.Title>{item.description}</Card.Title>
+                       <Card.Title style={{marginTop:18}}>{item.description}</Card.Title>
                    </Card>
+                   </Pressable>
                 ))}
             </ScrollView>
         </View>
