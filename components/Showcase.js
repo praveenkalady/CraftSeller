@@ -30,7 +30,7 @@ const Showcase = () => {
                 {loading && <Text>Loading...</Text>}
                 {showcaseItems?.map((item,i)=> (
                     <Pressable key={i} onPress={() =>console.log('Pressed')}>
-                   <Card containerStyle={{width:320}} key={i}>
+                   <Card containerStyle={{width:320,borderRadius:10}} key={i}>
                        <Card.Title>{item.title}</Card.Title>
                        <Card.Divider/>
                        <Card.Image source={{uri:item.image}} />

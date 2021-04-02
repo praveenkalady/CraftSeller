@@ -8,7 +8,6 @@ import { Provider } from 'react-redux';
 import { setUser} from './actions/userActions';
 import auth from '@react-native-firebase/auth';
 import store from './store';
-
 const theme = {
   colors:{
     primary:"#ff0b00",
