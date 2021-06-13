@@ -1,29 +1,34 @@
 import React, {useState, useEffect} from 'react';
 import {View, StyleSheet, ScrollView} from 'react-native';
+import {useDispatch,useSelector} from 'react-redux';
+import {setBasketLength} from '../../actions/basketActions';
 import Showcase from '../../components/Showcase';
 import {Text} from 'react-native-elements';
 import CustomCard from '../../components/CustomCard';
 import firestore from '@react-native-firebase/firestore';
-import Toast from 'react-native-toast-message';
 const HomeScreen = (props) => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   let mounted = true;
+  const dispatch = useDispatch();
+  const basket = useSelector(state => state.basketLength.basketLength);
   useEffect(() => {
     const fetchProducts = async () => {
       const items = await firestore().collection('products').get();
+      const cartLength = await (await firestore().collection('cart').get()).docs.length;
       let datas = [];
       for (const doc of items.docs) {
         datas.push({id: doc.id, product: doc.data()});
       }
       setProducts(datas);
+      dispatch(setBasketLength(cartLength));
     };
     if (mounted) {
       fetchProducts();
       setLoading(false);
     }
     return () => (mounted = false);
-  }, [firestore]);
+  }, [firestore,basket]);
   return (
     <>
       <ScrollView style={styles.container}>

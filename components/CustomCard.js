@@ -4,11 +4,14 @@ import {Text, Card, Button, Image} from 'react-native-elements';
 import firestore from '@react-native-firebase/firestore';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Toast from 'react-native-toast-message';
+import {useDispatch} from 'react-redux';
+import {setBasketLength} from '../actions/basketActions';
 
 const CustomCard = (props) => {
   const handleView = () => {
     props.navigation.navigate('Details', {id: props.id});
   };
+  const dispatch = useDispatch();
   const handleAddToCart = async (id, image, title, price) => {
     try {
       await firestore().collection('cart').add({
@@ -17,6 +20,9 @@ const CustomCard = (props) => {
         image,
         price,
       });
+      const basket = await (await firestore().collection('cart').get()).docs
+        .length;
+      dispatch(setBasketLength(basket));
       Toast.show({
         position: 'bottom',
         type: 'success',

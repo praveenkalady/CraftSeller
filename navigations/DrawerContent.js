@@ -15,7 +15,8 @@ const DrawerContent = (props) => {
     }
   };
   const title = email[0] + email[1];
-  const BadgeIcon = withBadge(10)(Icon);
+  const basketLength = useSelector((state) => state.basketLength.basketLength);
+  const BadgeIcon = withBadge(basketLength)(Icon);
   return (
     <>
       <DrawerContentScrollView style={styles.container} {...props}>

@@ -4,11 +4,14 @@ import firestore from '@react-native-firebase/firestore';
 import {LinearProgress, Image, Text, Button} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Toast from 'react-native-toast-message';
+import {useDispatch} from 'react-redux';
+import {setBasketLength} from '../../actions/basketActions';
 
 const ProductDetailsScreen = (props) => {
   const {id} = props.route.params;
   const [details, setDetails] = useState({});
   const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
   useEffect(() => {
     const getDetails = async () => {
       setLoading(true);
@@ -29,6 +32,9 @@ const ProductDetailsScreen = (props) => {
         image,
         price,
       });
+      const basket = await (await firestore().collection('cart').get()).docs
+        .length;
+      dispatch(setBasketLength(basket));
       Toast.show({
         position: 'bottom',
         type: 'success',
