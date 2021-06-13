@@ -3,7 +3,7 @@ import {View, StyleSheet, ScrollView} from 'react-native';
 import {useDispatch,useSelector} from 'react-redux';
 import {setBasketLength} from '../../actions/basketActions';
 import Showcase from '../../components/Showcase';
-import {Text} from 'react-native-elements';
+import {Text,Divider} from 'react-native-elements';
 import CustomCard from '../../components/CustomCard';
 import firestore from '@react-native-firebase/firestore';
 const HomeScreen = (props) => {
@@ -39,6 +39,7 @@ const HomeScreen = (props) => {
           <Text style={styles.sectionHeader} h4>
             Purchase Products
           </Text>
+          <Divider style={{marginTop:-18}} orientation="horizontal" />
           {!loading &&
             products.map((el, i) => (
               <CustomCard
