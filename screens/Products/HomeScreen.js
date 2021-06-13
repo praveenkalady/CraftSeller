@@ -4,7 +4,7 @@ import Showcase from '../../components/Showcase';
 import {Text} from 'react-native-elements';
 import CustomCard from '../../components/CustomCard';
 import firestore from '@react-native-firebase/firestore';
-
+import Toast from 'react-native-toast-message';
 const HomeScreen = (props) => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -25,25 +25,27 @@ const HomeScreen = (props) => {
     return () => (mounted = false);
   }, [firestore]);
   return (
-    <ScrollView style={styles.container}>
-      <View style={styles.header}>
-        <Showcase />
-      </View>
-      <View style={styles.footer}>
-        <Text style={styles.sectionHeader} h4>
-          Purchase Products
-        </Text>
-        {!loading &&
-          products.map((el, i) => (
-            <CustomCard
-              navigation={props.navigation}
-              id={el.id}
-              key={i}
-              product={el.product}
-            />
-          ))}
-      </View>
-    </ScrollView>
+    <>
+      <ScrollView style={styles.container}>
+        <View style={styles.header}>
+          <Showcase />
+        </View>
+        <View style={styles.footer}>
+          <Text style={styles.sectionHeader} h4>
+            Purchase Products
+          </Text>
+          {!loading &&
+            products.map((el, i) => (
+              <CustomCard
+                navigation={props.navigation}
+                id={el.id}
+                key={i}
+                product={el.product}
+              />
+            ))}
+        </View>
+      </ScrollView>
+    </>
   );
 };
 

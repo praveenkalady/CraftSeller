@@ -85,7 +85,6 @@ const ProductDetailsScreen = (props) => {
           </View>
         </>
       )}
-      <Toast ref={(ref) => Toast.setRef(ref)} />
     </View>
   );
 };

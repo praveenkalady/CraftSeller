@@ -1,25 +1,51 @@
 import React from 'react';
 import {View, StyleSheet, ActivityIndicator} from 'react-native';
 import {Text, Card, Button, Image} from 'react-native-elements';
+import firestore from '@react-native-firebase/firestore';
 import Icon from 'react-native-vector-icons/Ionicons';
+import Toast from 'react-native-toast-message';
 
 const CustomCard = (props) => {
   const handleView = () => {
     props.navigation.navigate('Details', {id: props.id});
   };
+  const handleAddToCart = async (id, image, title, price) => {
+    try {
+      await firestore().collection('cart').add({
+        id,
+        title,
+        image,
+        price,
+      });
+      Toast.show({
+        position: 'bottom',
+        type: 'success',
+        text1: 'Success',
+        text2: 'Successfully added to cart.',
+      });
+    } catch (err) {
+      Toast.show({
+        position: 'bottom',
+        type: 'error',
+        text1: 'Error',
+        text2: 'Unexpected error encountered.',
+      });
+    }
+  };
+  const {title, image, price, description} = props.product;
   return (
     <Card containerStyle={{padding: 10, borderRadius: 10}}>
       <View style={styles.header}>
         <View style={styles.info}>
-          <Text h4>{props.product.title}</Text>
-          <Text style={{fontSize: 20}}>₹{props.product.price}</Text>
-          <Text>{props.product.description}</Text>
+          <Text h4>{title}</Text>
+          <Text style={{fontSize: 20}}>₹{price}</Text>
+          <Text>{description}</Text>
         </View>
         <View style={styles.imageContainer}>
           <Image
             containerStyle={{borderRadius: 10}}
             style={styles.image}
-            source={{uri: props.product.image}}
+            source={{uri: image}}
             PlaceholderContent={<ActivityIndicator />}
           />
         </View>
@@ -37,6 +63,7 @@ const CustomCard = (props) => {
           <Button
             icon={<Icon name="add-circle-outline" size={24} color="white" />}
             raised
+            onPress={() => handleAddToCart(props.id, image, title, price)}
             title="Add to cart"
           />
         </View>
