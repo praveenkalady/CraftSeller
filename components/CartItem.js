@@ -3,20 +3,48 @@ import {View, StyleSheet} from 'react-native';
 import {Text, Image, Button} from 'react-native-elements';
 import Toast from 'react-native-toast-message';
 import Icon from 'react-native-vector-icons/Ionicons';
+import {setBasketLength} from '../actions/basketActions';
+import {useDispatch} from 'react-redux';
+import firestore from '@react-native-firebase/firestore';
 const CartItem = ({id, image, price, title}) => {
+  const dispatch = useDispatch();
+  const handleRemove = async (id) => {
+    try {
+      await firestore().collection('cart').doc(id).delete();
+      const basket = await (await firestore().collection('cart').get()).docs
+        .length;
+      dispatch(setBasketLength(basket));
+      Toast.show({
+        position: 'bottom',
+        type: 'success',
+        text1: 'Success',
+        text2: 'Successfully removed to cart.',
+      });
+    } catch (err) {
+      Toast.show({
+        position: 'bottom',
+        type: 'error',
+        text1: 'Error',
+        text2: 'Something went wrong.',
+      });
+    }
+  };
   return (
     <View style={styles.container}>
       <View style={styles.left}>
         <Image source={{uri: image}} style={styles.image} />
       </View>
       <View style={styles.right}>
-        <Text h4>{title}</Text>
+        <Text style={{fontSize:20,fontWeight:"bold",opacity:0.8}}>{title}</Text>
         <Text>{id}</Text>
-        <Text h4>{price}</Text>
+        <Text style={{textAlign: 'center'}} h4>
+          ₹{price}
+        </Text>
         <Button
-          icon={<Icon name="trash-outline" size={24} color="black" />}
+          icon={<Icon name="trash-outline" size={24} color="white" />}
           raised
           title="Remove"
+          onPress={() => handleRemove(id)}
         />
       </View>
     </View>
@@ -31,7 +59,8 @@ const styles = StyleSheet.create({
     padding: 10,
     flexDirection: 'row',
     backgroundColor: 'white',
-    marginBottom:10
+    marginBottom: 10,
+    borderRadius: 10,
   },
   left: {
     flex: 3,
@@ -39,10 +68,11 @@ const styles = StyleSheet.create({
   right: {
     flex: 4,
     flexDirection: 'column',
-    marginLeft:10
+    marginLeft: 10,
   },
-  image:{
-      width: 100,
-      height: 100
-  }
+  image: {
+    width: 100,
+    height: 100,
+    borderRadius: 10,
+  },
 });

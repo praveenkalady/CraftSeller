@@ -1,9 +1,10 @@
 import React, {useEffect, useState} from 'react';
-import {ScrollView, StyleSheet} from 'react-native';
+import {ScrollView, StyleSheet, View} from 'react-native';
+import {Text, Image, Button} from 'react-native-elements';
 import firestore from '@react-native-firebase/firestore';
 import CartItem from '../../components/CartItem';
 
-const CartScreen = () => {
+const CartScreen = (props) => {
   const [cartItems, setCartItems] = useState([]);
   const [loading, setLoading] = useState(false);
   let mounted = true;
@@ -23,11 +24,11 @@ const CartScreen = () => {
       setLoading(false);
     }
     return () => (mounted = false);
-  }, [firestore]);
+  }, [firestore().collection('cart')]);
   return (
-    <ScrollView style={styles.container}>
-      {!loading &&
-        cartItems.map((cartItem,index) => (
+    <ScrollView style={cartItems.length > 0 ? styles.container : styles.empty}>
+      {!loading && cartItems.length > 0 ? (
+        cartItems.map((cartItem, index) => (
           <CartItem
             key={index}
             id={cartItem.id}
@@ -35,7 +36,29 @@ const CartScreen = () => {
             image={cartItem.cartItems.image}
             price={cartItem.cartItems.price}
           />
-        ))}
+        ))
+      ) : (
+        <View style={styles.cartEmpty}>
+          <Image
+            style={{width: 300, height: 300}}
+            source={require('../../assets/images/cart-empty.png')}
+          />
+          <Text
+            style={{
+              textAlign: 'center',
+              fontSize: 20,
+              fontStyle: 'italic',
+              fontWeight: 'bold',
+              marginBottom: 20,
+            }}>
+            Your cart is empty
+          </Text>
+          <Button
+            title="Take me home"
+            onPress={() => props.navigation.navigate('Home')}
+          />
+        </View>
+      )}
     </ScrollView>
   );
 };
@@ -46,5 +69,16 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 10,
+  },
+  cartEmpty: {
+    flex: 1,
+    padding: 18,
+    marginVertical: 30,
+    backgroundColor: 'white',
+  },
+  empty: {
+    flex: 1,
+    padding: 10,
+    backgroundColor: 'white',
   },
 });
