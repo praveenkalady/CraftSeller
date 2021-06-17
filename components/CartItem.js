@@ -43,6 +43,7 @@ const CartItem = ({id, image, price, title}) => {
         <Button
           icon={<Icon name="trash-outline" size={24} color="white" />}
           raised
+          type="outline"
           title="Remove"
           onPress={() => handleRemove(id)}
         />

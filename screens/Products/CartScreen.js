@@ -3,7 +3,7 @@ import {ScrollView, StyleSheet, View} from 'react-native';
 import {Text, Image, Button} from 'react-native-elements';
 import firestore from '@react-native-firebase/firestore';
 import CartItem from '../../components/CartItem';
-
+import Subtotal from '../../components/Subtotal';
 const CartScreen = (props) => {
   const [cartItems, setCartItems] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -59,6 +59,7 @@ const CartScreen = (props) => {
           />
         </View>
       )}
+      {!loading && cartItems.length > 0 && <Subtotal />}
     </ScrollView>
   );
 };
