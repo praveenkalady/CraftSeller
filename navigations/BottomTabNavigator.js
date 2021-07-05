@@ -34,11 +34,6 @@ export function BottomTabNavigator() {
         name="Order"
         component={OrderScreenNavigator}
       />
-      <Tab.Screen
-        options={{tabBarIcon: ({color}) => <Icon name="settings" size={26} />}}
-        name="Settings"
-        component={SettingsNavigator}
-      />
     </Tab.Navigator>
   );
 }

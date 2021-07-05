@@ -12,7 +12,6 @@ const CartScreen = (props) => {
     const fetchCartItems = async () => {
       setLoading(true);
       const items = await firestore().collection('cart').get();
-      //   const cartLength = await (await firestore().collection('cart').get()).docs.length;
       let datas = [];
       for (const doc of items.docs) {
         datas.push({id: doc.id, cartItems: doc.data()});
@@ -59,7 +58,7 @@ const CartScreen = (props) => {
           />
         </View>
       )}
-      {!loading && cartItems.length > 0 && <Subtotal />}
+      {!loading && cartItems.length > 0 && <Subtotal {...props} />}
     </ScrollView>
   );
 };

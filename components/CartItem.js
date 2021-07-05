@@ -6,7 +6,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import {setBasketLength} from '../actions/basketActions';
 import {useDispatch} from 'react-redux';
 import firestore from '@react-native-firebase/firestore';
-const CartItem = ({id, image, price, title}) => {
+const CartItem = ({id, image, price, title,noButton}) => {
   const dispatch = useDispatch();
   const handleRemove = async (id) => {
     try {
@@ -32,21 +32,27 @@ const CartItem = ({id, image, price, title}) => {
   return (
     <View style={styles.container}>
       <View style={styles.left}>
-        <Image source={{uri: image}} style={styles.image} />
+        {image ? <Image source={{uri: image}} style={styles.image} />:
+          <Text>{name}</Text>
+        }
       </View>
       <View style={styles.right}>
-        <Text style={{fontSize:20,fontWeight:"bold",opacity:0.8}}>{title}</Text>
+        <Text style={{fontSize: 20, fontWeight: 'bold', opacity: 0.8}}>
+          {title}
+        </Text>
         <Text>{id}</Text>
         <Text style={{textAlign: 'center'}} h4>
           ₹{price}
         </Text>
-        <Button
-          icon={<Icon name="trash-outline" size={24} color="white" />}
-          raised
-          type="outline"
-          title="Remove"
-          onPress={() => handleRemove(id)}
-        />
+        {!noButton && (
+          <Button
+            icon={<Icon name="trash-outline" size={24} color="white" />}
+            raised
+            type="outline"
+            title="Remove"
+            onPress={() => handleRemove(id)}
+          />
+        )}
       </View>
     </View>
   );
@@ -57,7 +63,7 @@ export default CartItem;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 10,
+    padding: 5,
     flexDirection: 'row',
     backgroundColor: 'white',
     marginBottom: 10,

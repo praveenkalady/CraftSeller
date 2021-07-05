@@ -58,13 +58,6 @@ const DrawerContent = (props) => {
           label="Orders"
         />
         <DrawerItem
-          onPress={() => props.navigation.navigate('Settings')}
-          icon={({color, size}) => (
-            <Icon name="settings" color={color} size={size} />
-          )}
-          label="Settings"
-        />
-        <DrawerItem
           onPress={() => props.navigation.navigate('About')}
           icon={({color, size}) => (
             <Icon name="info" color={color} size={size} />
