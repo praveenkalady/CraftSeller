@@ -8,6 +8,7 @@ const OrderScreen = () => {
   const [loading, setLoading] = useState(true);
   const [orders, setOrders] = useState([]);
   const user = useSelector((state) => state.user.user);
+  let mounted = true;
   useEffect(() => {
     const fetchOrders = async () => {
       const items = await firestore()
@@ -21,8 +22,11 @@ const OrderScreen = () => {
       }
       setOrders(datas);
     };
-    fetchOrders();
-    setLoading(false);
+    if (mounted) {
+      fetchOrders();
+      setLoading(false);
+    }
+    return () => (mounted = false);
   }, [firestore().collection('orders')]);
   return (
     <ScrollView style={styles.container}>
@@ -32,6 +36,7 @@ const OrderScreen = () => {
       {!loading &&
         orders.map((item, i) => (
           <View
+            key={i}
             style={{
               flex: 1,
               backgroundColor: '#fff',

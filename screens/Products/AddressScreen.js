@@ -3,6 +3,8 @@ import {useSelector} from 'react-redux';
 import {View, StyleSheet} from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import {Input, Text, Button} from 'react-native-elements';
+import {setBasketLength} from '../../actions/basketActions';
+import {useDispatch} from 'react-redux';
 import uuid from 'react-native-uuid';
 import Toast from 'react-native-toast-message';
 const AddressScreen = (props) => {
@@ -13,6 +15,7 @@ const AddressScreen = (props) => {
   const [pincode, setPincode] = useState('');
   const [address, setAddress] = useState('');
   const user = useSelector((state) => state.user.user);
+  const dispatch = useDispatch();
   const handleSubmit = async () => {
     try {
       const items = await firestore()
@@ -41,6 +44,21 @@ const AddressScreen = (props) => {
         .collection('order')
         .doc(uuid.v4())
         .set(data);
+      const sampleData = await firestore()
+        .collection('cart')
+        .doc(user.uid)
+        .collection('basket')
+        .get();
+      for (const doc of sampleData.docs) {
+        await firestore()
+          .collection('cart')
+          .doc(user.uid)
+          .collection('basket')
+          .doc(doc.id)
+          .delete();
+      }
+      dispatch(setBasketLength(0));
+      console.log(sampleData);
       Toast.show({
         position: 'bottom',
         type: 'success',

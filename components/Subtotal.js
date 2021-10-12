@@ -7,6 +7,7 @@ import {Text, Divider, Button} from 'react-native-elements';
 const Subtotal = (props) => {
   const [cartItems, setCartItems] = useState([]);
   const [loading, setLoading] = useState(false);
+  let mounted = true;
   const user = useSelector((state) => state.user.user);
   useEffect(() => {
     const fetchCartItems = async () => {
@@ -22,8 +23,11 @@ const Subtotal = (props) => {
       }
       setCartItems(datas);
     };
-    fetchCartItems();
-    setLoading(false);
+    if (mounted) {
+      fetchCartItems();
+      setLoading(false);
+    }
+    return () => (mounted = false);
   }, [firestore().collection('cart')]);
   const totalPrice = parseFloat(
     cartItems.reduce((acc, item) => {
