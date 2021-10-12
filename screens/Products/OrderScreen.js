@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react';
+import {useSelector} from 'react-redux';
 import {ScrollView, StyleSheet, View} from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import {Text, Divider} from 'react-native-elements';
@@ -6,9 +7,14 @@ import CartItem from '../../components/CartItem';
 const OrderScreen = () => {
   const [loading, setLoading] = useState(true);
   const [orders, setOrders] = useState([]);
+  const user = useSelector((state) => state.user.user);
   useEffect(() => {
     const fetchOrders = async () => {
-      const items = await firestore().collection('order').get();
+      const items = await firestore()
+        .collection('orders')
+        .doc(user.uid)
+        .collection('order')
+        .get();
       let datas = [];
       for (const doc of items.docs) {
         datas.push({id: doc.id, orders: doc.data()});
@@ -17,7 +23,7 @@ const OrderScreen = () => {
     };
     fetchOrders();
     setLoading(false);
-  }, [firestore().collection('order')]);
+  }, [firestore().collection('orders')]);
   return (
     <ScrollView style={styles.container}>
       <Text h4 style={{textAlign: 'center'}}>
@@ -25,7 +31,13 @@ const OrderScreen = () => {
       </Text>
       {!loading &&
         orders.map((item, i) => (
-          <View style={{flex: 1,backgroundColor:"#fff",padding:10,marginBottom:10}}>
+          <View
+            style={{
+              flex: 1,
+              backgroundColor: '#fff',
+              padding: 10,
+              marginBottom: 10,
+            }}>
             {item.orders.cartItems.map((cartItem, i) => (
               <CartItem
                 key={i}

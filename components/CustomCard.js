@@ -4,24 +4,34 @@ import {Text, Card, Button, Image} from 'react-native-elements';
 import firestore from '@react-native-firebase/firestore';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Toast from 'react-native-toast-message';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {setBasketLength} from '../actions/basketActions';
 
 const CustomCard = (props) => {
   const handleView = () => {
     props.navigation.navigate('Details', {id: props.id});
   };
+  const user = useSelector((state) => state.user.user);
   const dispatch = useDispatch();
   const handleAddToCart = async (id, image, title, price) => {
     try {
-      await firestore().collection('cart').add({
-        id,
-        title,
-        image,
-        price,
-      });
-      const basket = await (await firestore().collection('cart').get()).docs
-        .length;
+      await firestore()
+        .collection('cart')
+        .doc(user.uid)
+        .collection('basket')
+        .add({
+          id,
+          title,
+          image,
+          price,
+        });
+      const basket = await (
+        await firestore()
+          .collection('cart')
+          .doc(user.uid)
+          .collection('basket')
+          .get()
+      ).docs.length;
       dispatch(setBasketLength(basket));
       Toast.show({
         position: 'bottom',
@@ -30,6 +40,7 @@ const CustomCard = (props) => {
         text2: 'Successfully added to cart.',
       });
     } catch (err) {
+      console.log(err);
       Toast.show({
         position: 'bottom',
         type: 'error',

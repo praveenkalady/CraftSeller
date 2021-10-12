@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import {useSelector} from 'react-redux';
 import {View, StyleSheet} from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import {Input, Text, Button} from 'react-native-elements';
@@ -11,9 +12,14 @@ const AddressScreen = (props) => {
   const [phone, setPhone] = useState('');
   const [pincode, setPincode] = useState('');
   const [address, setAddress] = useState('');
+  const user = useSelector((state) => state.user.user);
   const handleSubmit = async () => {
     try {
-      const items = await firestore().collection('cart').get();
+      const items = await firestore()
+        .collection('cart')
+        .doc(user.uid)
+        .collection('basket')
+        .get();
       let datas = [];
       for (const doc of items.docs) {
         datas.push({id: doc.id, cartItems: doc.data()});
@@ -29,7 +35,12 @@ const AddressScreen = (props) => {
         totalPrice: totalPrice,
         status: 'placed',
       };
-      await firestore().collection('order').doc(uuid.v4()).set(data);
+      await firestore()
+        .collection('orders')
+        .doc(user.uid)
+        .collection('order')
+        .doc(uuid.v4())
+        .set(data);
       Toast.show({
         position: 'bottom',
         type: 'success',

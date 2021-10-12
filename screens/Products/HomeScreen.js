@@ -1,9 +1,9 @@
 import React, {useState, useEffect} from 'react';
 import {View, StyleSheet, ScrollView} from 'react-native';
-import {useDispatch,useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {setBasketLength} from '../../actions/basketActions';
 import Showcase from '../../components/Showcase';
-import {Text,Divider} from 'react-native-elements';
+import {Text, Divider} from 'react-native-elements';
 import CustomCard from '../../components/CustomCard';
 import firestore from '@react-native-firebase/firestore';
 const HomeScreen = (props) => {
@@ -11,11 +11,18 @@ const HomeScreen = (props) => {
   const [loading, setLoading] = useState(true);
   let mounted = true;
   const dispatch = useDispatch();
-  const basket = useSelector(state => state.basketLength.basketLength);
+  const basket = useSelector((state) => state.basketLength.basketLength);
+  const user = useSelector((state) => state.user.user);
   useEffect(() => {
     const fetchProducts = async () => {
       const items = await firestore().collection('products').get();
-      const cartLength = await (await firestore().collection('cart').get()).docs.length;
+      const cartLength = await (
+        await firestore()
+          .collection('cart')
+          .doc(user.uid)
+          .collection('basket')
+          .get()
+      ).docs.length;
       let datas = [];
       for (const doc of items.docs) {
         datas.push({id: doc.id, product: doc.data()});
@@ -28,7 +35,7 @@ const HomeScreen = (props) => {
       setLoading(false);
     }
     return () => (mounted = false);
-  }, [firestore,basket]);
+  }, [firestore, basket]);
   return (
     <>
       <ScrollView style={styles.container}>
@@ -39,7 +46,7 @@ const HomeScreen = (props) => {
           <Text style={styles.sectionHeader} h4>
             Purchase Products
           </Text>
-          <Divider style={{marginTop:-18}} orientation="horizontal" />
+          <Divider style={{marginTop: -18}} orientation="horizontal" />
           {!loading &&
             products.map((el, i) => (
               <CustomCard

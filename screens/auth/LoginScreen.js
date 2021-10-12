@@ -1,4 +1,6 @@
 import React, {useState} from 'react';
+import { useDispatch } from 'react-redux';
+import { setUser } from '../../actions/userActions';
 import {
   View,
   Text,
@@ -20,6 +22,7 @@ const LoginScreen = (props) => {
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const [hidePassword, setHidePassword] = useState(true);
+  const dispatch = useDispatch();
   const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   const handleSubmit = () => {
     const test = re.test(String(email).toLowerCase());
@@ -41,10 +44,12 @@ const LoginScreen = (props) => {
       auth()
         .signInWithEmailAndPassword(email, password)
         .then((user) => {
+          dispatch(setUser(user));
           setLoading(false);
         })
         .catch((err) => {
           setErrors({field: 'email', message: err.message});
+          dispatch(setUser({}));
           setLoading(false);
         });
     }

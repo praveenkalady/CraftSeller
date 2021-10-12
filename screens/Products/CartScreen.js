@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react';
+import {useSelector} from 'react-redux';
 import {ScrollView, StyleSheet, View} from 'react-native';
 import {Text, Image, Button} from 'react-native-elements';
 import firestore from '@react-native-firebase/firestore';
@@ -7,11 +8,16 @@ import Subtotal from '../../components/Subtotal';
 const CartScreen = (props) => {
   const [cartItems, setCartItems] = useState([]);
   const [loading, setLoading] = useState(false);
+  const user = useSelector((state) => state.user.user);
   let mounted = true;
   useEffect(() => {
     const fetchCartItems = async () => {
       setLoading(true);
-      const items = await firestore().collection('cart').get();
+      const items = await firestore()
+        .collection('cart')
+        .doc(user.uid)
+        .collection('basket')
+        .get();
       let datas = [];
       for (const doc of items.docs) {
         datas.push({id: doc.id, cartItems: doc.data()});

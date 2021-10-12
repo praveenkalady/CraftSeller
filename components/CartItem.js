@@ -1,4 +1,5 @@
 import React from 'react';
+import {useSelector} from 'react-redux';
 import {View, StyleSheet} from 'react-native';
 import {Text, Image, Button} from 'react-native-elements';
 import Toast from 'react-native-toast-message';
@@ -6,13 +7,24 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import {setBasketLength} from '../actions/basketActions';
 import {useDispatch} from 'react-redux';
 import firestore from '@react-native-firebase/firestore';
-const CartItem = ({id, image, price, title,noButton}) => {
+const CartItem = ({id, image, price, title, noButton}) => {
   const dispatch = useDispatch();
+  const user = useSelector((state) => state.user.user);
   const handleRemove = async (id) => {
     try {
-      await firestore().collection('cart').doc(id).delete();
-      const basket = await (await firestore().collection('cart').get()).docs
-        .length;
+      await firestore()
+        .collection('cart')
+        .doc(user.uid)
+        .collection('basket')
+        .doc(id)
+        .delete();
+      const basket = await (
+        await firestore()
+          .collection('cart')
+          .doc(user.uid)
+          .collection('basket')
+          .get()
+      ).docs.length;
       dispatch(setBasketLength(basket));
       Toast.show({
         position: 'bottom',
@@ -32,9 +44,11 @@ const CartItem = ({id, image, price, title,noButton}) => {
   return (
     <View style={styles.container}>
       <View style={styles.left}>
-        {image ? <Image source={{uri: image}} style={styles.image} />:
+        {image ? (
+          <Image source={{uri: image}} style={styles.image} />
+        ) : (
           <Text>{name}</Text>
-        }
+        )}
       </View>
       <View style={styles.right}>
         <Text style={{fontSize: 20, fontWeight: 'bold', opacity: 0.8}}>

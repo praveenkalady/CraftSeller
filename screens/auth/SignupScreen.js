@@ -1,4 +1,6 @@
 import React, {useState} from 'react';
+import {useDispatch} from 'react-redux';
+import {setUser} from '../../actions/userActions';
 import {
   View,
   Text,
@@ -21,7 +23,9 @@ const SignupScreen = (props) => {
   const [loading, setLoading] = useState(false);
   const [hidePassword, setHidePassword] = useState(true);
   const [hideConfirmPassword, setHideConfirmPassword] = useState(true);
-  const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  const dispatch = useDispatch();
+  const re =
+    /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   const handleSubmit = () => {
     const test = re.test(String(email).toLowerCase());
     if (!email && !password && !confirmPassword) {
@@ -48,11 +52,13 @@ const SignupScreen = (props) => {
         .createUserWithEmailAndPassword(email, password)
         .then((user) => {
           setLoading(false);
+          dispatch(setUser(user));
           user.user.sendEmailVerification();
         })
         .catch((err) => {
           setErrors({field: 'email', message: err.message});
           setLoading(false);
+          dispatch(setUser({}));
         });
     }
   };
